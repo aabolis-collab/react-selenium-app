@@ -16,8 +16,8 @@ pipeline {
             steps {
                 powershell '''
                     $env:BROWSER="none"
-                    Start-Process -FilePath "npm" -ArgumentList "start" -NoNewWindow
-                    Start-Sleep -Seconds 25
+                    Start-Process -FilePath "cmd.exe" -ArgumentList "/c npm start" -NoNewWindow
+                    Start-Sleep -Seconds 20
                     npm run test:selenium
                 '''
             }
