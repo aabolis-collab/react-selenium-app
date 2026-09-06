@@ -17,9 +17,9 @@ pipeline {
             steps {
                 powershell '''
                     $env:BROWSER="none"
-                    $env:CI="true"
-                    Start-Process -FilePath "cmd.exe" -ArgumentList "/c npm start" -NoNewWindow
-                    Start-Sleep -Seconds 25
+                    $env:PORT="3000"
+                    Start-Job -ScriptBlock { Set-Location $using:PWD; npm start }
+                    Start-Sleep -Seconds 20
                     npm run test:selenium
                 '''
             }
@@ -28,7 +28,10 @@ pipeline {
 
     post {
         always {
-            powershell 'Stop-Process -Name "node" -Force -ErrorAction SilentlyContinue'
+            powershell '''
+                Get-Job | Stop-Job -ErrorAction SilentlyContinue
+                Stop-Process -Name "node" -Force -ErrorAction SilentlyContinue
+            '''
         }
     }
 }
