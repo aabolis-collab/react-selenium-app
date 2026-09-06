@@ -4,16 +4,16 @@ pipeline {
     stages {
         stage('Install Dependencies') {
             steps {
-                bat 'npm install'
+                bat 'call "C:\\Program Files\\nodejs\\npm.cmd" install'
             }
         }
 
         stage('Start React App & Run Selenium Tests') {
             steps {
                 bat '''
-                    start "ReactApp" /B npm start
+                    start "ReactApp" /B "C:\\Program Files\\nodejs\\npm.cmd" start
                     timeout /t 15 /nobreak
-                    npm run test:selenium
+                    call "C:\\Program Files\\nodejs\\npm.cmd" run test:selenium
                 '''
             }
         }
