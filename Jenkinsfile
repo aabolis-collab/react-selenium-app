@@ -3,6 +3,7 @@ pipeline {
 
     environment {
         PATH = "C:\\Program Files\\nodejs;${env.PATH}"
+        CI = 'true'
     }
 
     stages {
@@ -16,8 +17,9 @@ pipeline {
             steps {
                 powershell '''
                     $env:BROWSER="none"
+                    $env:CI="true"
                     Start-Process -FilePath "cmd.exe" -ArgumentList "/c npm start" -NoNewWindow
-                    Start-Sleep -Seconds 20
+                    Start-Sleep -Seconds 25
                     npm run test:selenium
                 '''
             }
