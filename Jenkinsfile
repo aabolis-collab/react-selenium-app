@@ -4,17 +4,17 @@ pipeline {
     stages {
         stage('Install Dependencies') {
             steps {
-                bat 'call "C:\\Program Files\\nodejs\\npm.cmd" install --legacy-peer-deps'
+                powershell 'npm install --legacy-peer-deps'
             }
         }
 
         stage('Start React App & Run Selenium Tests') {
             steps {
-                bat '''
-                    set BROWSER=none
-                    start "ReactApp" /B "C:\\Program Files\\nodejs\\npm.cmd" start
-                    timeout /t 20 /nobreak
-                    call "C:\\Program Files\\nodejs\\npm.cmd" run test:selenium
+                powershell '''
+                    $env:BROWSER="none"
+                    Start-Process -FilePath "npm" -ArgumentList "start" -NoNewWindow
+                    Start-Sleep -Seconds 20
+                    npm run test:selenium
                 '''
             }
         }
@@ -22,7 +22,7 @@ pipeline {
 
     post {
         always {
-            bat 'taskkill /F /IM node.exe /T || exit 0'
+            powershell 'Stop-Process -Name "node" -Force -ErrorAction SilentlyContinue'
         }
     }
 }
